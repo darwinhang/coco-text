@@ -3,7 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 __author__ = 'andreasveit'
-__version__ = '1.3'
+__version__ = '2.0'
 
 # Interface for evaluating with the COCO-Text dataset.
 
@@ -23,7 +23,7 @@ __version__ = '1.3'
 #  area, intersect, iou_score, decode, inter  -  small helper functions
 #  printDetailedResults   - Prints detailed results as reported in COCO-Text paper
 
-# COCO-Text Evaluation Toolbox.        Version 1.3
+# COCO-Text Evaluation Toolbox.        Version 2.0
 # Data, Data API and paper available at:  http://vision.cornell.edu/se3/coco-text/
 # Code written by Andreas Veit, 2016.
 # Licensed under the Simplified BSD License [see bsd.txt]

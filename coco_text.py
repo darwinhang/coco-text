@@ -3,7 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 __author__ = 'andreasveit'
-__version__ = '1.1'
+__version__ = '2.0'
 # Interface for accessing the COCO-Text dataset.
 
 # COCO-Text is a large dataset designed for text detection and recognition.
@@ -27,7 +27,6 @@ __version__ = '1.1'
 #  getImgIds  - Get img ids that satisfy given filter conditions.
 #  loadAnns   - Load anns with the specified ids.
 #  loadImgs   - Load imgs with the specified ids.
-#  showAnns   - Display the specified annotations.
 #  loadRes    - Load algorithm results and create API for accessing them.
 # Throughout the API "ann"=annotation, "cat"=category, and "img"=image.
 
@@ -168,7 +167,7 @@ class COCO_Text:
         elif type(ids) == int:
             return [self.imgs[ids]]
 
-    def showAnns(self, anns, show_polygon=False):
+    def showAnns(self, anns, show_mask=False):
         """
         Display the specified annotations.
         :param anns (array of object): annotations to display
@@ -181,20 +180,20 @@ class COCO_Text:
         color = []
         for ann in anns:
             c = np.random.random((1, 3)).tolist()[0]
-            if show_polygon:
-                tl_x, tl_y, tr_x, tr_y, br_x, br_y, bl_x, bl_y = ann['polygon']
-                verts = [(tl_x, tl_y), (tr_x, tr_y), (br_x, br_y), (bl_x, bl_y), (0, 0)]
-                codes = [Path.MOVETO, Path.LINETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY]
+            if show_mask:
+                verts = list(zip(*[iter(ann['mask'])] * 2)) + [(0, 0)]
+                codes = [Path.MOVETO] + [Path.LINETO] * (len(verts) - 2) + [Path.CLOSEPOLY]
                 path = Path(verts, codes)
                 patch = PathPatch(path, facecolor='none')
                 boxes.append(patch)
-                left, top = tl_x, tl_y
+                text_x, text_y = verts[0]
             else:
                 left, top, width, height = ann['bbox']
                 boxes.append(Rectangle([left,top],width,height,alpha=0.4))
+                text_x, text_y = left, top
             color.append(c)
             if 'utf8_string' in list(ann.keys()):
-                ax.annotate(ann['utf8_string'],(left,top-4),color=c)
+                ax.annotate(ann['utf8_string'],(text_x, text_y-4),color=c)
         p = PatchCollection(boxes, facecolors=color, edgecolors=(0,0,0,1), linewidths=3, alpha=0.4)
         ax.add_collection(p)
 
