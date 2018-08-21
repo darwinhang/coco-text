@@ -1,2 +1,2 @@
-__all__ = ['COCO_Text', 'coco_evaluation']
-
+from .coco_text import COCO_Text as COCOText
+import code_evaluation
